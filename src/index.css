@@ -1,0 +1,9 @@
+.App {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.square {
+    width: 200px;
+    height: 200px;
+}

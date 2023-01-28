@@ -1,9 +1,25 @@
-.App {
-    display: inline-flex;
-    flex-direction: column;
+* {
+    margin: 0;
+    padding: 0;
 }
 
-.square {
-    width: 200px;
-    height: 200px;
+.App {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.header,
+.footer {
+    padding: 10px 0;
+    background-color: cornflowerblue;
+    text-align: center;
+}
+
+.main {
+    flex-grow: 1;
+}
+
+.footer {
+    bottom: 0;
 }

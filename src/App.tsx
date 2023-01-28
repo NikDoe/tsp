@@ -1,37 +1,55 @@
-import { ChangeEvent, useState } from "react"
-import Input from "./components/Input"
-import Square from "./components/Square"
+import { FormEvent, useEffect, useState } from "react"
+import AddItem from "./components/AddItem"
+import Content from "./components/Content"
+import Footer from "./components/Footer"
+import Header from "./components/Header"
+import { IProduct } from "./types"
 
 function App() {
-	const [bg, setBg] = useState<string>("")
-	const [checked, setChecked] = useState<boolean>(true)
+	const [items, setItems] = useState<IProduct[]>(() => {
+		const value = window.localStorage.getItem("list")
+		if (value) {
+			return JSON.parse(value)
+		} else {
+			return []
+		}
+	})
 
-	const changeBackGroundHandler = (e: ChangeEvent<HTMLInputElement>) => {
-		setBg(e.target.value)
+	useEffect(() => {
+		if (localStorage.getItem("list") === null) {
+			localStorage.setItem("list", JSON.stringify([]))
+		}
+	}, [])
+
+	const setAndSaveItems = (arr: IProduct[]): void => {
+		setItems(arr)
+		localStorage.setItem("list", JSON.stringify(arr))
 	}
 
-	const enableBGHandler = (e: ChangeEvent<HTMLInputElement>) => {
-		setChecked(!checked)
+	const handleChecked = (id: number): void => {
+		const listItems = items.map(item =>
+			item.id === id ? { ...item, checked: !item.checked } : item
+		)
+		setAndSaveItems(listItems)
+	}
+
+	const addItem = (text: string): void => {
+		if (!text) return
+		const id = items.length ? items[items.length - 1].id + 1 : 1
+		const myNewItem = { id, checked: false, text }
+		const listItems = [...items, myNewItem]
+		setAndSaveItems(listItems)
 	}
 
 	return (
 		<div className="App">
-			<Square
-				background={bg}
-				enambleBG={checked}
+			<Header title="shopping list" />
+			<AddItem addItem={addItem} />
+			<Content
+				items={items}
+				handleChecked={handleChecked}
 			/>
-			<Input
-				type="text"
-				onChange={changeBackGroundHandler}
-			/>
-			<div>
-				<label>залить фон этим цветом</label>
-				<Input
-					type="checkbox"
-					checked={checked}
-					onChange={enableBGHandler}
-				/>
-			</div>
+			<Footer />
 		</div>
 	)
 }

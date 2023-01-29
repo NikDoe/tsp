@@ -3,6 +3,7 @@ import AddItem from "./components/AddItem"
 import Content from "./components/Content"
 import Footer from "./components/Footer"
 import Header from "./components/Header"
+import Searc from "./components/Search"
 import { IProduct } from "./types"
 
 function App() {
@@ -14,6 +15,8 @@ function App() {
 			return []
 		}
 	})
+
+	const [search, setSearch] = useState<string>("")
 
 	useEffect(() => {
 		if (localStorage.getItem("list") === null) {
@@ -41,15 +44,29 @@ function App() {
 		setAndSaveItems(listItems)
 	}
 
+	const deleteItem = (id: number): void => {
+		const listItems = items.filter(item => item.id !== id)
+		setAndSaveItems(listItems)
+	}
+
+	const searchItems: IProduct[] = search
+		? items.filter(item => item.text.toLowerCase().includes(search.toLowerCase()))
+		: items
+
 	return (
 		<div className="App">
 			<Header title="shopping list" />
+			<Searc
+				search={search}
+				setSearch={setSearch}
+			/>
 			<AddItem addItem={addItem} />
 			<Content
-				items={items}
+				items={searchItems}
 				handleChecked={handleChecked}
+				handleDelete={deleteItem}
 			/>
-			<Footer />
+			<Footer length={items.length} />
 		</div>
 	)
 }

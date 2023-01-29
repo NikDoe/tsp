@@ -5,9 +5,10 @@ import Item from "../Item"
 interface IList {
 	items: IProduct[]
 	handleChecked: (id: number) => void
+	handleDelete: (id: number) => void
 }
 
-const List: FC<IList> = ({ items, handleChecked }) => {
+const List: FC<IList> = ({ items, handleChecked, handleDelete }) => {
 	return (
 		<ul>
 			{items.map(item => (
@@ -15,6 +16,7 @@ const List: FC<IList> = ({ items, handleChecked }) => {
 					key={item.id}
 					item={item}
 					handleChecked={handleChecked}
+					handleDelete={handleDelete}
 				/>
 			))}
 		</ul>

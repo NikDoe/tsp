@@ -4,9 +4,10 @@ import { IProduct } from "../../types"
 interface IItem {
 	item: IProduct
 	handleChecked: (id: number) => void
+	handleDelete: (id: number) => void
 }
 
-const Item: FC<IItem> = ({ item, handleChecked }) => {
+const Item: FC<IItem> = ({ item, handleChecked, handleDelete }) => {
 	return (
 		<li>
 			<input
@@ -15,7 +16,7 @@ const Item: FC<IItem> = ({ item, handleChecked }) => {
 				onChange={() => handleChecked(item.id)}
 			/>
 			{item.text}
-			<button>delete</button>
+			<button onClick={() => handleDelete(item.id)}>delete</button>
 		</li>
 	)
 }

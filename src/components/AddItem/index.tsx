@@ -26,7 +26,7 @@ const AddItem: FC<IAddNewItem> = ({ addItem }) => {
 				type="text"
 				value={newElement}
 			/>
-			<button onClick={() => addItem(newElement)}>добавить</button>
+			<button onClick={() => addItem(newElement)}>add</button>
 		</form>
 	)
 }

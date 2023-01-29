@@ -10,7 +10,7 @@ interface IContent {
 
 const Content: FC<IContent> = ({ items, handleChecked, handleDelete }) => {
 	return (
-		<main className="main">
+		<>
 			{items.length !== 0 ? (
 				<List
 					items={items}
@@ -20,7 +20,7 @@ const Content: FC<IContent> = ({ items, handleChecked, handleDelete }) => {
 			) : (
 				<p>list is empty</p>
 			)}
-		</main>
+		</>
 	)
 }
 

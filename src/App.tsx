@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import AddItem from "./components/AddItem"
 import Content from "./components/Content"
 import Footer from "./components/Footer"
@@ -7,20 +7,30 @@ import Searc from "./components/Search"
 import { IProduct } from "./types"
 
 function App() {
-	const [items, setItems] = useState<IProduct[]>(() => {
-		const value = window.localStorage.getItem("list")
-		if (value) {
-			return JSON.parse(value)
-		} else {
-			return []
-		}
-	})
+	const API_URL: string = "http://localhost:3500/items"
 
+	const [items, setItems] = useState<IProduct[]>([])
 	const [search, setSearch] = useState<string>("")
+	const [fetchError, setFetchError] = useState<string | null>(null)
+	const [isLoading, setIsloading] = useState<boolean>(true)
 
 	useEffect(() => {
-		localStorage.setItem("list", JSON.stringify(items))
-	}, [items])
+		const fetchItems = async (): Promise<void> => {
+			try {
+				const response = await fetch(API_URL)
+				if (!response.ok) throw new Error("the data was not uploaded successfully")
+				const products: IProduct[] = await response.json()
+				setItems(products)
+				setFetchError(null)
+			} catch (error) {
+				if (error instanceof Error) setFetchError(error.message)
+			} finally {
+				setIsloading(false)
+			}
+		}
+
+		fetchItems()
+	}, [])
 
 	const handleChecked = (id: number): void => {
 		const listItems = items.map(item =>
@@ -54,11 +64,17 @@ function App() {
 				setSearch={setSearch}
 			/>
 			<AddItem addItem={addItem} />
-			<Content
-				items={searchItems}
-				handleChecked={handleChecked}
-				handleDelete={deleteItem}
-			/>
+			<main>
+				{isLoading && <p style={{ textAlign: "center" }}>product loading..........</p>}
+				{fetchError && <p style={{ textAlign: "center", color: "red" }}>{fetchError}</p>}
+				{!fetchError && !isLoading && (
+					<Content
+						items={searchItems}
+						handleChecked={handleChecked}
+						handleDelete={deleteItem}
+					/>
+				)}
+			</main>
 			<Footer length={items.length} />
 		</div>
 	)

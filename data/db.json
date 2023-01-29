@@ -1,14 +1,19 @@
 {
-    "items" : [
-        {
-            "id": 1,
-            "checked": false,
-            "text": "бананы"
-        },
-        {
-            "id": 2,
-            "checked": false,
-            "text": "апельсины"
-        }
-    ]
+  "items": [
+    {
+      "id": 1,
+      "checked": false,
+      "text": "бананы"
+    },
+    {
+      "id": 2,
+      "checked": false,
+      "text": "апельсины"
+    },
+    {
+      "id": 3,
+      "checked": false,
+      "text": "манго"
+    }
+  ]
 }

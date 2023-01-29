@@ -6,6 +6,8 @@ import Header from "./components/Header"
 import Searc from "./components/Search"
 import { IProduct } from "./types"
 
+import { apiRequest } from "./utils/"
+
 function App() {
 	const API_URL: string = "http://localhost:3500/items"
 
@@ -32,24 +34,43 @@ function App() {
 		fetchItems()
 	}, [])
 
-	const handleChecked = (id: number): void => {
+	const handleChecked = async (id: number): Promise<void> => {
 		const listItems = items.map(item =>
 			item.id === id ? { ...item, checked: !item.checked } : item
 		)
 		setItems(listItems)
+
+		const checkedItem = listItems.filter(item => item.id === id)
+
+		const requestUrl = `${API_URL}/${id}`
+		const requestResult = await apiRequest("PATCH", requestUrl, {
+			checked: checkedItem[0].checked,
+		})
+
+		if (requestResult) setFetchError(requestResult)
 	}
 
-	const addItem = (text: string): void => {
+	const addItem = async (text: string): Promise<void> => {
 		if (!text) return
 		const id = items.length ? items[items.length - 1].id + 1 : 1
 		const myNewItem = { id, checked: false, text }
 		const listItems = [...items, myNewItem]
 		setItems(listItems)
+
+		const requestUrl = `${API_URL}`
+		const requestResult = await apiRequest("POST", requestUrl, myNewItem)
+
+		if (requestResult) setFetchError(requestResult)
 	}
 
-	const deleteItem = (id: number): void => {
+	const deleteItem = async (id: number): Promise<void> => {
 		const listItems = items.filter(item => item.id !== id)
 		setItems(listItems)
+
+		const requestUrl = `${API_URL}/${id}`
+		const requestResult = await apiRequest("DELETE", requestUrl)
+
+		if (requestResult) setFetchError(requestResult)
 	}
 
 	const searchItems: IProduct[] = search

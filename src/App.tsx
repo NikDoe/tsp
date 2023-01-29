@@ -19,21 +19,14 @@ function App() {
 	const [search, setSearch] = useState<string>("")
 
 	useEffect(() => {
-		if (localStorage.getItem("list") === null) {
-			localStorage.setItem("list", JSON.stringify([]))
-		}
-	}, [])
-
-	const setAndSaveItems = (arr: IProduct[]): void => {
-		setItems(arr)
-		localStorage.setItem("list", JSON.stringify(arr))
-	}
+		localStorage.setItem("list", JSON.stringify(items))
+	}, [items])
 
 	const handleChecked = (id: number): void => {
 		const listItems = items.map(item =>
 			item.id === id ? { ...item, checked: !item.checked } : item
 		)
-		setAndSaveItems(listItems)
+		setItems(listItems)
 	}
 
 	const addItem = (text: string): void => {
@@ -41,12 +34,12 @@ function App() {
 		const id = items.length ? items[items.length - 1].id + 1 : 1
 		const myNewItem = { id, checked: false, text }
 		const listItems = [...items, myNewItem]
-		setAndSaveItems(listItems)
+		setItems(listItems)
 	}
 
 	const deleteItem = (id: number): void => {
 		const listItems = items.filter(item => item.id !== id)
-		setAndSaveItems(listItems)
+		setItems(listItems)
 	}
 
 	const searchItems: IProduct[] = search
